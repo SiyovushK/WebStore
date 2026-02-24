@@ -42,6 +42,7 @@ public class ProductFilterDto
     public Guid? SellerId { get; set; }
     public decimal? MinPrice { get; set; }
     public decimal? MaxPrice { get; set; }
+    public ProductSortOption SortBy { get; set; } = ProductSortOption.CreatedAtDesc;
     
     public int PageNumber { get; set; } = 1;
     public int PageSize { get; set; } = 10;

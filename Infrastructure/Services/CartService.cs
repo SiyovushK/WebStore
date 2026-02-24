@@ -128,6 +128,7 @@ public class CartService(DataContext _context, IMapper _mapper, ITokenService _t
             .IgnoreQueryFilters() // Ignore global filters to include soft-deleted products
             .Include(c => c.Product)
             .Where(c => c.UserId == userIdResult.Value)
+            .OrderByDescending(c => c.AddedAt)
             .ToListAsync();
 
         if (!cartItems.Any())

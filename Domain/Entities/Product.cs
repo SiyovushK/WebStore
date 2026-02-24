@@ -14,4 +14,7 @@ public abstract class Product
 
     public bool IsDeleted { get; set; } = false;
     public Guid SellerId { get; set; }
+
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    public DateTime? UpdatedAt { get; set; }
 }

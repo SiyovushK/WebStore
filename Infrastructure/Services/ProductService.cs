@@ -68,6 +68,16 @@ public class ProductService(DataContext _context, IMapper _mapper, ITokenService
         if (filter.MaxPrice.HasValue)
             query = query.Where(p => p.Price <= filter.MaxPrice.Value);
 
+        // Sorting
+        query = filter.SortBy switch
+        {
+            ProductSortOption.PriceAsc => query.OrderBy(p => p.Price),
+            ProductSortOption.PriceDesc => query.OrderByDescending(p => p.Price),
+            ProductSortOption.CreatedAtAsc => query.OrderBy(p => p.CreatedAt),
+            ProductSortOption.CreatedAtDesc => query.OrderByDescending(p => p.CreatedAt),
+            _ => query.OrderByDescending(p => p.CreatedAt)
+        };
+
         var products = await query
             .AsNoTracking()
             .Skip((filter.PageNumber - 1) * filter.PageSize)
@@ -140,6 +150,8 @@ public class ProductService(DataContext _context, IMapper _mapper, ITokenService
             return Result<ProductDto>.Failure(ErrorMessages.Unauthorized);
 
         _mapper.Map(dto, product);
+        product.UpdatedAt = DateTime.UtcNow;
+
         _context.Products.Update(product);
         await _context.SaveChangesAsync();
 
